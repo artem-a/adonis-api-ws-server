@@ -4,10 +4,10 @@ export default class WsProvider {
   constructor (protected container: IocContract) {}
 
   public register () {
-    this.container.singleton('App/Addons/WS', async () => {
-      const WS = new (await import('.')).default()
+    this.container.singleton('Adonis/Addons/Ws', () => {
+      const { WS } = require('.')
 
-      return WS
+      return new WS()
     })
   }
 
@@ -15,9 +15,13 @@ export default class WsProvider {
     const App = (await import('@ioc:Adonis/Core/Application')).default
 
     if (App.environment === 'web') {
-      const WS = await this.container.use('App/Addons/WS')
+      const WS = await this.container.use('Adonis/Addons/Ws')
 
       await WS.init()
     }
+  }
+
+  public async shutdown () {
+    await this.container.use('Adonis/Addons/Ws').close()
   }
 }
