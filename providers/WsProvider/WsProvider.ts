@@ -12,7 +12,7 @@ export default class WsProvider {
   }
 
   public async ready () {
-    const App = (await import('@ioc:Adonis/Core/Application')).default
+    const App = await this.container.use('Adonis/Core/Application')
 
     if (App.environment === 'web') {
       const WS = await this.container.use('Adonis/Addons/Ws')
